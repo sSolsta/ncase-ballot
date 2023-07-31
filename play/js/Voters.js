@@ -124,6 +124,11 @@ function NormalisedScoreVoter(model){
 			if(minDist == null || minDist > dist) minDist = dist;
 			if(maxDist == null || maxDist < dist) maxDist = dist;
 		}
+		// Hard limit on the distance a voter will accept
+		var hardLimit = self.radiusStep * 4;
+		if (maxDist>hardLimit) maxDist = hardLimit;
+		// make sure minDist is smaller
+		if (minDist>=maxDist) minDist = 0;
 		
 		for (var cID in rawDists) {
 			normalisedScores[cID] = self.getScore(rawDists[cID], minDist, maxDist)
