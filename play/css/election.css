@@ -8,7 +8,7 @@ Election/Sandbox design:
 
 #left, #center, #right{
 	float:left;
-	height: 320px;
+	height: 360px;
 }
 #left{
 	width:220px;
