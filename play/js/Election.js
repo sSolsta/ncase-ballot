@@ -96,6 +96,8 @@ Election.star = function(model, options){
 		tally[candidate] /= model.getTotalVoters();
 	}
 	var bestTwo = _countBestTwo(tally);
+	console.log(tally)
+	console.log(bestTwo)
 	first = bestTwo.first;
 	second = bestTwo.second;
 	
