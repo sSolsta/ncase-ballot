@@ -49,43 +49,6 @@ Election.score = function(model, options){
 };
 
 Election.star = function(model, options){
-	/*
-	// Tally the approvals & get winner!
-	var tally = _tally(model, function(tally, ballot){
-		for(var candidate in ballot){
-			tally[candidate] += ballot[candidate];
-		}
-	});
-	for(var candidate in tally){
-		tally[candidate] /= model.getTotalVoters();
-	}
-	var winner = _countWinner(tally);
-	var color = _colorWinner(model, winner);
-
-	// NO WINNER?! OR TIE?!?!
-	if(!winner){
-
-		var text = "<b>NOBODY WINS</b>";
-		model.caption.innerHTML = text;
-
-	}else{
-
-		// Caption
-		var text = "";
-		text += "<span class='small'>";
-		text += "<b>highest average score wins</b><br>";
-		for(var i=0; i<model.candidates.length; i++){
-			var c = model.candidates[i].id;
-			text += _icon(c)+"'s score: "+(tally[c].toFixed(2))+" out of 5.00<br>";
-		}
-		text += "<br>";
-		text += _icon(winner)+" has the highest score, so...<br>";
-		text += "</span>";
-		text += "<br>";
-		text += "<b style='color:"+color+"'>"+winner.toUpperCase()+"</b> WINS";
-		model.caption.innerHTML = text;
-	}
-	*/
 	// tally the scores and get the highest two candidates
 	var tally = _tally(model, function(tally, ballot){
 		for(var candidate in ballot){
@@ -96,8 +59,6 @@ Election.star = function(model, options){
 		tally[candidate] /= model.getTotalVoters();
 	}
 	var bestTwo = _countBestTwo(tally);
-	console.log(tally)
-	console.log(bestTwo)
 	first = bestTwo.first;
 	second = bestTwo.second;
 	
@@ -132,7 +93,6 @@ Election.star = function(model, options){
 	var text = "";
 	text += "<span class='small'>";
 	text += "<b>round one: score</b><br>";
-	text += "select the two highest average scores<br>";
 	for(var i=0; i<model.candidates.length; i++){
 		var c = model.candidates[i].id;
 		text += _icon(c)+"'s score: "+(tally[c].toFixed(2))+" out of 5.00<br>";
@@ -140,14 +100,12 @@ Election.star = function(model, options){
 	text += _icon(first)+" and "+_icon(second)+" have the two highest scores<br><br>";
 	
 	text += "<b>round two: automatic runoff</b><br>";
-	text += "pit highest candidates against each other treating the higher of the two scores on each ballot as one vote, excluding ties<br>";
 
 	text += _icon(first)+" got "+firstTally+" votes<br>";
 	text += _icon(second)+" got "+secondTally+" votes<br>";
 	text += "<br>";
 	if (firstTally == secondTally) {
 		text += "<b>tiebreaker</b><br>";
-		text += "both candidates received the same votes, so use the highest average score instead<br>";
 		text += _icon(first)+"'s score: "+(tally[first].toFixed(2))+" out of 5.00<br>";
 		text += _icon(second)+"'s score: "+(tally[second].toFixed(2))+" out of 5.00<br>";
 	} else {
