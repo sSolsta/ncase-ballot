@@ -100,8 +100,11 @@ Election.star = function(model, options){
 	second = bestTwo.second;
 	
 	// now automatic runoff
+	var ballots = model.getBallots();
+	
 	firstTally = 0;
 	secondTally = 0;
+	
 	for (var i=0; i<ballots.length; i++) {
 		if (ballots[i][first] > ballots[i][second]) {
 			firstTally++;
