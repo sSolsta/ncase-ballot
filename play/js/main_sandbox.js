@@ -163,7 +163,8 @@ function main(config){
 			{name:"Condorcet", voter:RankedVoter, election:Election.condorcet},
 			{name:"Approval", voter:ApprovalVoter, election:Election.approval, margin:4},
 			{name:"Score", voter:ScoreVoter, election:Election.score},
-			{name:"Normalised Score", voter:NormalisedScoreVoter, election:Election.score, margin:4}
+			{name:"Normalised Score", voter:NormalisedScoreVoter, election:Election.score, margin:4},
+			{name:"Normalised Score", voter:NormalisedScoreVoter, election:Election.star}
 		];
 		var onChooseSystem = function(data){
 
