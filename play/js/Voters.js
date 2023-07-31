@@ -81,6 +81,105 @@ function ScoreVoter(model){
 
 }
 
+function NormalisedScoreVoter(model){
+
+	var self = this;
+	self.model = model;
+
+	self.radiusStep = window.HACK_BIG_RANGE ? 74 : 30; // step: x<25, 25<x<50, 50<x<75, 75<x<100, 100<x
+
+	self.getScore = function(x, minDist, maxDist){
+		var normalised = (x - minDist) / (maxDist - minDist)
+		/*
+		// distribution of 554433221100 (equal segments)
+		if(normalised < 1/6) return 5;
+		if(normalised < 2/6) return 4;
+		if(normalised < 3/6) return 3;
+		if(normalised < 4/6) return 2;
+		if(normalised < 5/6) return 1;
+		return 0;
+  		*/
+		// distribution of 5443322110 (shorter 5 and 0 segments)
+		if(normalised < 1/10) return 5;
+		if(normalised < 3/10) return 4;
+		if(normalised < 5/10) return 3;
+		if(normalised < 7/10) return 2;
+		if(normalised < 9/10) return 1;
+		return 0;
+	};
+
+	self.getBallot = function(x, y){
+
+		var rawDists = {};
+		var normalisedScores = {};  // normalise scores between 0 and 5 inclusive
+		var minDist = null;
+		var maxDist = null;
+		for(var i=0; i<self.model.candidates.length; i++){
+			var c = self.model.candidates[i];
+			var dx = c.x-x;
+			var dy = c.y-y;
+			var dist = Math.sqrt(dx*dx+dy*dy);
+			rawDists[c.id] = dist;
+			// i'm not a javascript coder this probably isn't the best way to do this
+			if(minDist == null || minDist > dist) minDist = dist;
+			if(maxDist == null || maxDist < dist) maxDist = dist;
+		}
+		
+		for (var cID in rawDists) {
+			normalisedScores[cID] = self.getScore(rawDists[cID], minDist, maxDist)
+		}
+		
+		// Scooooooore
+		return normalisedScores;
+
+	};
+
+	self.drawBG = function(ctx, x, y, ballot){
+
+		// RETINA
+		x = x*2;
+		y = y*2;
+
+		// Draw big ol' circles.
+		for(var i=1;i<5;i++){
+			ctx.beginPath();
+			ctx.arc(x, y, (self.radiusStep*i)*2, 0, Math.TAU, false);
+			ctx.lineWidth = (5-i)*2;
+			ctx.strokeStyle = "#888";
+			ctx.stroke();
+		}
+
+	};
+
+	self.drawCircle = function(ctx, x, y, size, ballot){
+
+		// There are #Candidates*5 slices
+		// Fill 'em in in order -- and the rest is gray.
+		var totalSlices = self.model.candidates.length*5;
+		var leftover = totalSlices;
+		var slices = [];
+		for(var i=0; i<self.model.candidates.length; i++){
+			var c = self.model.candidates[i];
+			var cID = c.id;
+			var score = ballot[cID];
+			leftover -= score;
+			slices.push({
+				num: score,
+				fill: c.fill
+			});
+		}
+		// Leftover is gray
+		slices.push({
+			num: leftover,
+			fill: "#bbb"
+		});
+		// FILL 'EM IN
+		_drawSlices(ctx, x, y, size, slices, totalSlices);
+
+	};
+
+}
+
 function ApprovalVoter(model){
 
 	var self = this;
