@@ -471,16 +471,21 @@ var _countWinner = function(tally){
 
 var _countBestTwo = function(tally){
 	var highScore = -1;
+	var secondScore = -1;
 	var winners = {
 		first: null,
 		second: null
 	}
 	for(var candidate in tally){
 		var score = tally[candidate];
-		if(score>highScore){
+		if (score > highScore) {
+			secondScore = highScore;
 			highScore = score;
 			winners.second = winners.first;
 			winners.first = candidate;
+		} else if score > secondScore) {
+			secondScore = score;
+			winners.second = candidate;
 		}
 	}
 	
