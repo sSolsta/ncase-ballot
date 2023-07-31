@@ -483,7 +483,7 @@ var _countBestTwo = function(tally){
 			highScore = score;
 			winners.second = winners.first;
 			winners.first = candidate;
-		} else if score > secondScore) {
+		} else if (score > secondScore) {
 			secondScore = score;
 			winners.second = candidate;
 		}
